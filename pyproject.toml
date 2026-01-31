@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rlang-compiler"
+version = "0.1.0"
+description = "A compiler for RLang: A Domain Specific Language for Reinforcement Learning environments."
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "antlr4-python3-runtime",
+    "numpy",
+    "gymnasium",
+    "stable-baselines3",
+    "shimmy",
+]
+
+[project.scripts]
+rlang = "rlang.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
