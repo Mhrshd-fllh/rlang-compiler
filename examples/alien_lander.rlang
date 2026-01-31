@@ -1,0 +1,93 @@
+ENVIRONMENT AlienLander {
+    STATE {
+        x: continuous(0.0, 10.0);
+        y: continuous(0.0, 15.0);
+        vx: continuous((0.0 - 10.0), 10.0);
+        vy: continuous((0.0 - 10.0), 10.0);
+        
+        // Auxiliary state for reward shaping
+        dist_x: continuous(0.0, 10.0);
+        
+        // Flags: 0=No, 1=Yes
+        landed: discrete[No, Yes];
+        crashed: discrete[No, Yes];
+        done: discrete[No, Yes];
+    }
+    
+    ACTIONS {
+        wait, up, left, right
+    }
+    
+    DYNAMICS {
+        always {
+            // Gravity
+            vy = vy - 0.05;
+            
+            // Physics
+            x = x + vx;
+            y = y + vy;
+            
+            // Calculate distance to target (x=5) for shaping
+            if (x < 5.0) {
+                dist_x = 5.0 - x;
+            }
+            if (x > 4.999) {
+                dist_x = x - 5.0;
+            }
+            
+            // Ground Detection
+            if (y < 0.0) {
+                 // Landing Condition: Center is 5.0. Target [4, 6]
+                 if (vy > (0.0 - 1.0)) {
+                     if (x > 4.0) {
+                         if (x < 6.0) {
+                             landed = 1;
+                         }
+                     }
+                 }
+                 
+                 // Crash Logic
+                 if (landed == 0) {
+                     crashed = 1;
+                 }
+                 
+                 // Physics Stop
+                 y = 0.0;
+                 vx = 0.0;
+                 vy = 0.0;
+                 done = 1;
+            }
+            
+            // Out of bounds
+            if (x < 0.0) { done = 1; crashed = 1; }
+            if (x > 10.0) { done = 1; crashed = 1; }
+            if (y > 15.0) { done = 1; crashed = 1; }
+        }
+        
+        when (action in [up]) {
+             vy = vy + 0.15;
+        }
+        when (action in [left]) {
+             vx = vx - 0.1;
+        }
+        when (action in [right]) {
+             vx = vx + 0.1;
+        }
+    }
+    
+    REWARDS {
+        if (landed == 1) -> 100.0;
+        if (crashed == 1) -> (0.0 - 20.0);
+        
+        // Shaping: Penalty for being far from center
+        if (done == 0) -> (0.0 - (dist_x * 0.1));
+        
+        // Small time penalty
+        if (done == 0) -> (0.0 - 0.05);
+    }
+    
+    TRAINING {
+        Algo: PPO;
+        Timesteps: 300000;
+    }
+}
