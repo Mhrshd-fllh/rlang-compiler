@@ -18,6 +18,8 @@ Creating RL environments often involves writing repetitive boilerplate code for 
 *   **Control Flow**: Supports `always`, `when`, and `if` logic for complex dynamics.
 *   **Reward Shaping**: Define multiple reward conditions easily.
 
+-> [Read the Grammar Specification](docs/GRAMMAR.md) for full syntax details.
+
 ## Requirements 📦
 
 *   Python 3.9+
