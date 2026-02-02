@@ -6,6 +6,15 @@
 
 **RLang** is a Domain Specific Language (DSL) designed to simplify the creation of Reinforcement Learning (RL) environments. The **RLang Compiler** takes high-level environment descriptions (`.rlang` files) and compiles them into fully functional Python code compatible with Gymnasium and Stable-Baselines3.
 
+## Project Members 👥
+
+| Student Name | Student ID |
+| :--- | :--- |
+| Milad Zarei-Maleki | 401521282 |
+| Mehrshad Fallah | 401521462 |
+| Delara Jalali | 401521129 |
+| Tina Mohammadpour | 401522052 |
+
 ## Motive 🎯
 
 Creating RL environments often involves writing repetitive boilerplate code for state spaces, action spaces, and stepping logic. RLang abstracts this complexity, allowing researchers and developers to focus on the **dynamics** and **reward functions** of their environments.
